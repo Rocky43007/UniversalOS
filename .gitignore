@@ -1,0 +1,6 @@
+out
+*.o
+*.bin
+isodir
+*.zip
+*.iso
