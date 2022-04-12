@@ -1,19 +1,20 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
- 
+
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
 #endif
- 
+
 /* This tutorial will only work for the 32-bit ix86 targets. */
 #if !defined(__i386__)
 #error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif
- 
+
 /* Hardware text mode color constants. */
-enum vga_color {
+enum vga_color
+{
 	VGA_COLOR_BLACK = 0,
 	VGA_COLOR_BLUE = 1,
 	VGA_COLOR_GREEN = 2,
@@ -31,88 +32,116 @@ enum vga_color {
 	VGA_COLOR_LIGHT_BROWN = 14,
 	VGA_COLOR_WHITE = 15,
 };
- 
-static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
+
+static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
 	return fg | bg << 4;
 }
- 
-static inline uint16_t vga_entry(unsigned char uc, uint8_t color) 
+
+static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
 {
-	return (uint16_t) uc | (uint16_t) color << 8;
+	return (uint16_t)uc | (uint16_t)color << 8;
 }
- 
-size_t strlen(const char* str) 
+
+size_t strlen(const char *str)
 {
 	size_t len = 0;
 	while (str[len])
 		len++;
 	return len;
 }
- 
+
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
- 
+
 size_t terminal_row;
 size_t terminal_column;
 uint8_t terminal_color;
-uint16_t* terminal_buffer;
- 
-void terminal_initialize(void) 
+uint16_t *terminal_buffer;
+
+void terminal_initialize(void)
 {
 	terminal_row = 0;
 	terminal_column = 0;
 	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-	terminal_buffer = (uint16_t*) 0xB8000;
-	for (size_t y = 0; y < VGA_HEIGHT; y++) {
-		for (size_t x = 0; x < VGA_WIDTH; x++) {
+	terminal_buffer = (uint16_t *)0xB8000;
+	for (size_t y = 0; y < VGA_HEIGHT; y++)
+	{
+		for (size_t x = 0; x < VGA_WIDTH; x++)
+		{
 			const size_t index = y * VGA_WIDTH + x;
 			terminal_buffer[index] = vga_entry(' ', terminal_color);
 		}
 	}
 }
- 
-void terminal_setcolor(uint8_t color) 
+
+void terminal_setcolor(uint8_t color)
 {
 	terminal_color = color;
 }
- 
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) 
+
+void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
 }
- 
-void terminal_putchar(char c) 
+
+void terminal_scroll()
 {
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-	if (c == '\n') {
-		terminal_column = 0;
-		terminal_row += 1;
+	for (int i = 0; i < VGA_HEIGHT; i++)
+	{
+		for (int m = 0; m < VGA_WIDTH; m++)
+		{
+			terminal_buffer[i * VGA_WIDTH + m] = terminal_buffer[(i + 1) * VGA_WIDTH + m];
+		}
 	}
-	if (++terminal_column == VGA_WIDTH) {
+}
+
+void terminal_putchar(char c, uint8_t color)
+{
+	terminal_color = vga_entry_color(color, VGA_COLOR_BLACK);
+	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+	if (c == '\n')
+	{
+		++terminal_row;
+		terminal_column = 0;
+	}
+	if (++terminal_column == VGA_WIDTH)
+	{
 		terminal_column = 0;
 		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
+		{
+			// terminal_row = 0;
+			terminal_scroll();
+		}
 	}
 }
- 
-void terminal_write(const char* data, size_t size) 
+
+void terminal_write(const char *data, size_t size, uint8_t color)
 {
 	for (size_t i = 0; i < size; i++)
-		terminal_putchar(data[i]);
+		terminal_putchar(data[i], color);
 }
- 
-void terminal_writestring(const char* data) 
+
+void terminal_writestring(const char *data, uint8_t color)
 {
-	terminal_write(data, strlen(data));
+	terminal_write(data, strlen(data), color);
 }
- 
-void kernel_main(void) 
+
+/*void terminal_input(const char *data)
+{
+	terminal_writestring(data)
+}*/
+
+void kernel_main(void)
 {
 	/* Initialize terminal interface */
 	terminal_initialize();
- 
+
 	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello, kernel World!\nNow I am testing new lines!");
+	terminal_writestring("Welcome to Universal OS: Version 1.0.0-alpha_5 by Rocky43007\n", VGA_COLOR_GREEN);
+
+	terminal_writestring("Testing New Write String\n", VGA_COLOR_LIGHT_GREY);
+
+	terminal_writestring("ASCII Test -> o/", VGA_COLOR_LIGHT_BLUE);
 }

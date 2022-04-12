@@ -4,7 +4,7 @@ export PATH="$HOME/UniversalOS/compiler/bin:$PATH"
 
 i686-elf-as boot.s -o boot.o
 echo Boot File Output Created
-i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -print-file-name=crtbegin.o
 echo Kernel Created
 i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
 echo .bin file created
@@ -14,5 +14,5 @@ else
   echo the file is not multiboot
 fi
 cp myos.bin isodir/boot/myos.bin
-grub-mkrescue -o universalos-1.0.0-alpha_1.iso isodir
+grub-mkrescue -o universalos-1.0.0-alpha_5_32bit.iso isodir
 
