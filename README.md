@@ -2,7 +2,7 @@
 
 This is a project created by Rocky43007 to build an OS which can run Linux, Windows and MacOS applications without having to switch oses or machines.
 
-For the 32 bit compiler used for this project, check out [this great tool by LordMilko](https://github.com/lordmilko/i686-elf-tools)!
+For the compiler used for this project, check out [this great tool by LordMilko](https://github.com/lordmilko/i686-elf-tools)!
 
 **Note: This project is a work in progress as Rocky is learning how to build a kernel from scratch.**
 
