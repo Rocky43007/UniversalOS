@@ -3,6 +3,7 @@
     "files.associations": {
         "*.ejs": "html",
         "*.def": "c",
-        "cstdio": "c"
+        "cstdio": "c",
+        "tty.h": "c"
     }
 }

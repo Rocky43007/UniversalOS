@@ -1,7 +1,4 @@
-out
-*.o
-*.bin
-isodir
-*.zip
 *.iso
+isodir
+sysroot
 compiler
