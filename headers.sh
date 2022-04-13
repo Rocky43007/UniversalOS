@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 . ./config.sh
+export PATH="$HOME/UniversalOS/compiler/bin:$PATH"
 
 mkdir -p "$SYSROOT"
 

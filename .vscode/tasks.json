@@ -1,0 +1,67 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Clean Build",
+            "type": "shell",
+            "command": "./clean.sh",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Build Kernel",
+            "type": "shell",
+            "command": "./build.sh",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Copy Headers",
+            "type": "shell",
+            "command": "./headers.sh",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Build ISO",
+            "type": "shell",
+            "command": "./iso.sh",
+            "args": [
+                "${input:version}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "Build Operating System",
+            "group": "build",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Clean Build",
+                "Build Kernel",
+                "Copy Headers",
+                "Build ISO"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "version",
+            "description": "State what is the version of the compiled ISO",
+            "type": "promptString"
+        }
+    ]
+}

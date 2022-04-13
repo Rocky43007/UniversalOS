@@ -4,6 +4,7 @@
         "*.ejs": "html",
         "*.def": "c",
         "cstdio": "c",
-        "tty.h": "c"
+        "tty.h": "c",
+        "random": "c"
     }
 }
