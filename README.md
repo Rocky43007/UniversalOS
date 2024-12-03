@@ -10,7 +10,7 @@ For the 32 bit and 64 bit compilers used for this project, check out [this great
 
 **32 Bit Kernel**: 
 
-![32 Bit Kernel](https://cdn.discordapp.com/attachments/495827872775143424/962749454618886144/Screen_Shot_2022-04-10_at_7.12.42_PM.png)
+![32 Bit Kernel](https://github.com/user-attachments/assets/678fdadd-b49a-4f8b-aa06-07076df10a14)
 
 **Colors and non working extended ASCII Art:**
-![Colors](https://cdn.discordapp.com/attachments/739916829828448320/963406487793844244/Screen_Shot_2022-04-12_at_2.51.18_PM.png)
+![Colors](https://github.com/user-attachments/assets/3dfb3a20-55f9-4d4e-b70d-f5d8eadc8b92)
